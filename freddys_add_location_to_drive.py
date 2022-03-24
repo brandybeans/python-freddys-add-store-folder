@@ -4,10 +4,15 @@ import os
 import shutil
 import re
 
-#Script Made by Brandon Hahn 2022
-
+'''Script Made by Brandon Hahn 2022'''
+'''Log File Location'''
 log_file = "\\\\192.168.1.100\\map_as_y\\Brink\\Customers\\FFC\\pdill\\add_location_log.txt"
 
+'''
+Main function that adds a new store folder on the network drive using the contents of the Blank Staging File.
+Using pyperclip is adds the Location ID from the clipboard and edits each .cfg file in their 
+respective folder.
+'''
 def add_location_to_drive():
     store_num = input("What is the store number? ")
     term = "R1"
@@ -68,6 +73,9 @@ def add_location_to_drive():
         add_location_to_drive()
     return 0
 
+'''
+Edits the .cfg file based on the given parameters.
+'''
 def replace_loc_id(store_num, term, type, text_to_search, replacement_text):
     filename = "\\\\192.168.1.100\\map_as_y\\Brink\\Customers\\FFC\Staging\\{}\\{}\\{}.cfg".format(store_num, term, type)
     with fileinput.FileInput(filename, inplace=True, backup='.bak') as file:
