@@ -26,6 +26,9 @@ respective folder.
 '''
 def add_location_to_drive():
     store_num = input("What is the store number? ")
+    if not store_num_check(store_num):
+        print("Store number is not in 00-0000 format, please try again.")
+        return add_location_to_drive()
     term = "R1"
     filename = network_drive_loc+"{}".format(store_num)
     if not os.path.exists(filename):
@@ -122,6 +125,14 @@ def duplicate_locid_check(locid, log_file):
         return False
     return False
 
+''' Checks if store number is in the 00-0000 format'''
+def store_num_check(store_num):
+    regex = r"([0-9][0-9]\-[0-9]*)"
+    regexsearch = re.search(regex, store_num)
+    if regexsearch[1] == store_num:
+        return True
+    else:
+        return False
 
 #duplicate_locid_check("7f341892-5609-446b-b1b3-c4d8730102f3", log_file)
 add_location_to_drive()
