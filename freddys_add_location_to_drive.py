@@ -7,7 +7,12 @@ import re
 '''Script Made by Brandon Hahn 2022'''
 
 '''Log File Location'''
-log_file = "\\\\192.168.1.100\\map_as_y\\Brink\\Customers\\FFC\\pdill\\add_location_log.txt"
+debug = 0
+if debug == 0:
+    log_file = "\\\\192.168.1.100\\map_as_y\\Brink\\Customers\\FFC\\pdill\\add_location_log.txt"
+else:
+    log_file = "\\\\192.168.1.100\\map_as_y\\Brink\\Customers\\FFC\\pdill\\add_location_log - Copy.txt"
+
 
 '''
 Main function that adds a new store folder on the network drive using the contents of the Blank Staging File.
@@ -48,11 +53,12 @@ def add_location_to_drive():
     If there's a duplicate it'll warn the user.
     '''
     if duplicate_locid_check(replacement_text, log_file):
-        run_again = input("Are you sure you want to continue with location ID " + replacement_text + "?")
+        run_again = input("\nAre you sure you want to continue with location ID " + replacement_text + "? ")
         run_again = run_again.upper()
         if not run_again[0] == "Y":
             print("Please delete the store folder you created on the Y drive and try again!")
             exitinput = input("Press enter to continue")
+            return 0
 
     logfile = open(log_file, "a+")
     logfile.write("Added store {} with LocationID {}.".format(store_num, replacement_text) + "\n")
@@ -112,7 +118,7 @@ def duplicate_locid_check(locid, log_file):
         if len(duplicates) > 0:
             print("Warning! That location ID has already been used! See below. \n")
             for i in duplicates:
-                print(i)
+                print(i.strip())
             return True
         return False
     return False
