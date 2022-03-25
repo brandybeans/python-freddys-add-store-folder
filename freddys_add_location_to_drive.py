@@ -134,5 +134,12 @@ def store_num_check(store_num):
     else:
         return False
 
+''' Returns total lines of log file'''
+def log_file_num_lines(log_file):
+    with open(log_file, 'r') as fp:
+        x = len(fp.readlines())
+        return print('Total lines:', x)
+
+#log_file_num_lines(log_file)
 #duplicate_locid_check("7f341892-5609-446b-b1b3-c4d8730102f3", log_file)
 add_location_to_drive()
