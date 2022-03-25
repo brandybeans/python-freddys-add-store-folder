@@ -13,15 +13,12 @@ if debug == 0:
 else:
     log_file = "\\\\192.168.1.100\\map_as_y\\Brink\\Customers\\FFC\\pdill\\add_location_log - Copy.txt"
 
-'''
-Blank Staging File folder location
-'''
+''' Blank Staging File folder location '''
 blank_staging_folder = "\\\\192.168.1.100\\map_as_y\\Brink\Customers\\FFC\\pdill\\Blank Staging File - Brink"
 
-'''
-NAS folder location
-'''
+''' NAS folder location '''
 network_drive_loc = "\\\\192.168.1.100\\map_as_y\\Brink\\Customers\\FFC\Staging\\"
+
 '''
 Main function that adds a new store folder on the network drive using the contents of the Blank Staging File.
 Using pyperclip is adds the Location ID from the clipboard and edits each .cfg file in their 
@@ -46,9 +43,7 @@ def add_location_to_drive():
     text_to_search2 = "00000000-0000-0000-0000-000000000000"
     Clipboard_test = input("Once LocationID is copied to clipboard press enter to continue")
     replacement_text = pyperclip.paste()
-    '''
-    Checks if the location ID matches the 00000000-0000-0000-0000-000000000000 format.
-    '''
+    '''    Checks if the location ID matches the 00000000-0000-0000-0000-000000000000 format.    '''
     if not len(text_to_search2) == len(replacement_text):
         print("Warning the text that you copied doesn't match the 00000000-0000-0000-0000-000000000000 format!")
         print("Please delete the store folder you created on the Y drive and try again!")
@@ -57,9 +52,7 @@ def add_location_to_drive():
         if run_again[0] == "Y":
             add_location_to_drive()
         return 0
-    '''
-    If there's a duplicate it'll warn the user.
-    '''
+    '''    If there's a duplicate it'll warn the user.    '''
     if duplicate_locid_check(replacement_text, log_file):
         run_again = input("\nAre you sure you want to continue with location ID " + replacement_text + "? ")
         run_again = run_again.upper()
@@ -97,9 +90,7 @@ def add_location_to_drive():
         add_location_to_drive()
     return 0
 
-'''
-Edits the .cfg file based on the given parameters.
-'''
+''' Edits the .cfg file based on the given parameters. '''
 def replace_loc_id(store_num, term, type, text_to_search, replacement_text):
     filename = network_drive_loc+"{}\\{}\\{}.cfg".format(store_num, term, type)
     with fileinput.FileInput(filename, inplace=True, backup='.bak') as file:
