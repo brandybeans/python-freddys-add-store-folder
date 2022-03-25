@@ -13,7 +13,15 @@ if debug == 0:
 else:
     log_file = "\\\\192.168.1.100\\map_as_y\\Brink\\Customers\\FFC\\pdill\\add_location_log - Copy.txt"
 
+'''
+Blank Staging File folder location
+'''
+blank_staging_folder = "\\\\192.168.1.100\\map_as_y\\Brink\Customers\\FFC\\pdill\\Blank Staging File - Brink"
 
+'''
+NAS folder location
+'''
+network_drive_loc = "\\\\192.168.1.100\\map_as_y\\Brink\\Customers\\FFC\Staging\\"
 '''
 Main function that adds a new store folder on the network drive using the contents of the Blank Staging File.
 Using pyperclip is adds the Location ID from the clipboard and edits each .cfg file in their 
@@ -22,13 +30,13 @@ respective folder.
 def add_location_to_drive():
     store_num = input("What is the store number? ")
     term = "R1"
-    filename = "\\\\192.168.1.100\\map_as_y\\Brink\\Customers\\FFC\Staging\\{}".format(store_num)
+    filename = network_drive_loc+"{}".format(store_num)
     if not os.path.exists(filename):
         #os.makedirs(filename)
-        src = "\\\\192.168.1.100\\map_as_y\\Brink\Customers\\FFC\\pdill\\Blank Staging File - Brink"
+        src = blank_staging_folder
         dst = filename
         shutil.copytree(src, dst)
-    filename = "\\\\192.168.1.100\\map_as_y\\Brink\\Customers\\FFC\Staging\\{}\\{}\\Register.cfg".format(store_num, term)
+    filename = network_drive_loc+"{}\\{}\\Register.cfg".format(store_num, term)
     file = open(filename, "r")
     line = file.read()
     file.close()
@@ -93,7 +101,7 @@ def add_location_to_drive():
 Edits the .cfg file based on the given parameters.
 '''
 def replace_loc_id(store_num, term, type, text_to_search, replacement_text):
-    filename = "\\\\192.168.1.100\\map_as_y\\Brink\\Customers\\FFC\Staging\\{}\\{}\\{}.cfg".format(store_num, term, type)
+    filename = network_drive_loc+"{}\\{}\\{}.cfg".format(store_num, term, type)
     with fileinput.FileInput(filename, inplace=True, backup='.bak') as file:
         for line in file:
             print(line.replace(text_to_search, replacement_text), end='')
