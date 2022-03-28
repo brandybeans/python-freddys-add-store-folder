@@ -140,6 +140,15 @@ def log_file_num_lines(log_file):
         x = len(fp.readlines())
         return print('Total lines:', x)
 
-#log_file_num_lines(log_file)
-#duplicate_locid_check("7f341892-5609-446b-b1b3-c4d8730102f3", log_file)
-add_location_to_drive()
+
+
+
+def main():
+    ''' For Testing '''
+    # log_file_num_lines(log_file)
+    # duplicate_locid_check("7f341892-5609-446b-b1b3-c4d8730102f3", log_file)
+    ''' Main Function'''
+    add_location_to_drive()
+
+if __name__ == "__main__":
+    main()
