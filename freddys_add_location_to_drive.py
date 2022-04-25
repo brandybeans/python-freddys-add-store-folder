@@ -76,9 +76,11 @@ def add_location_to_drive():
         filename = network_drive_loc+r"{}\{}".format(store_num,folder)
         if not os.path.exists(filename):
             os.makedirs(filename)
+
         src = blank_staging_folder + r"\{}\{}.cfg".format(folder,termtype[folders.index(folder)])
         dst = filename + r"\{}.cfg".format(termtype[folders.index(folder)])
-        shutil.copy(src, dst)
+        if not os.path.exists(dst):
+            shutil.copy(src, dst)
     term = "R1"
     filename = network_drive_loc + "{}".format(store_num)
     filename = network_drive_loc+"{}\\{}\\Register.cfg".format(store_num, term)
@@ -101,17 +103,17 @@ def add_location_to_drive():
             add_location_to_drive()
         return 0
     '''    If there's a duplicate it'll warn the user.    '''
-    if duplicate_locid_check(replacement_text, log_file, store_num):
+    if duplicate_locid_check(replacement_text, log_file, store_num, replacement_text):
         run_again = input("\nAre you sure you want to continue with location ID " + replacement_text + "? ")
         run_again = run_again.upper()
         if not run_again[0] == "Y":
             print("Please delete the store folder you created on the Y drive and try again!")
             exitinput = input("Press enter to continue")
             return 0
-
-    logfile = open(log_file, "a+")
-    logfile.write("Added store {} with LocationID {}.".format(store_num, replacement_text) + "\n")
-    logfile.close()
+        else:
+            logfile = open(log_file, "a+")
+            logfile.write("Added store {} with LocationID {}.".format(store_num, replacement_text) + "\n")
+            logfile.close()
 
     replace_loc_id(store_num, "R1", "Register", text_to_search, replacement_text)
     replace_loc_id(store_num, "R2", "Register", text_to_search, replacement_text)
@@ -153,7 +155,7 @@ def replace_loc_id(store_num, term, type, text_to_search, replacement_text):
 Checks if Location ID has already been used in the log file.
 If there is a duplicate in the log file it'll warn the user first.
 '''
-def duplicate_locid_check(locid, log_file, store_num):
+def duplicate_locid_check(locid, log_file, store_num, replacement_text):
     if os.path.exists(log_file):
         duplicates = []
         regex = r"(" + re.escape(locid) + r")"
@@ -168,12 +170,18 @@ def duplicate_locid_check(locid, log_file, store_num):
                     regexsearchstore = re.search(regexstore, line)
                     if not regexsearchstore[1] == store_num:
                         duplicates.append(line)
+                    else:
+                        return False
         if len(duplicates) > 0:
             print("Warning! That location ID has already been used! See below. \n")
             for i in duplicates:
                 print(i.strip())
             return True
+        logfile = open(log_file, "a+")
+        logfile.write("Added store {} with LocationID {}.".format(store_num, replacement_text) + "\n")
+        logfile.close()
         return False
+
     return False
 
 ''' Checks if store number is in the 00-0000 format'''
