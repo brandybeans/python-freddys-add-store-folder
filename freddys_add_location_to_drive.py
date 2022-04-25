@@ -25,17 +25,62 @@ Using pyperclip is adds the Location ID from the clipboard and edits each .cfg f
 respective folder.
 '''
 def add_location_to_drive():
+    folders = [
+        'R1',
+        'R2',
+        'R3',
+        'R4',
+        'R5',
+        'R6',
+        'R7',
+        'R8',
+        'R9',
+        'Grill',
+        'Make',
+        'Expo',
+        'Custard',
+        'DT Grill',
+        'DT Grill 2',
+        'Grill 2',
+        'DT Expo',
+        'DT Expo 2',
+        'DT Make'
+    ]
+    termtype = [
+        'Register',
+        'Register',
+        'Register',
+        'Register',
+        'Register',
+        'Register',
+        'Register',
+        'Register',
+        'Register',
+        'Kitchen',
+        'Kitchen',
+        'Kitchen',
+        'Kitchen',
+        'Kitchen',
+        'Kitchen',
+        'Kitchen',
+        'Kitchen',
+        'Kitchen',
+        'Kitchen',
+    ]
     store_num = input("What is the store number? ")
     if not store_num_check(store_num):
         print("Store number is not in 00-0000 format, please try again.")
         return add_location_to_drive()
     term = "R1"
-    filename = network_drive_loc+"{}".format(store_num)
-    if not os.path.exists(filename):
-        #os.makedirs(filename)
-        src = blank_staging_folder
-        dst = filename
-        shutil.copytree(src, dst)
+    for folder in folders:
+        filename = network_drive_loc+r"{}\{}".format(store_num,folder)
+        if not os.path.exists(filename):
+            os.makedirs(filename)
+        src = blank_staging_folder + r"\{}\{}.cfg".format(folder,termtype[folders.index(folder)])
+        dst = filename + r"\{}.cfg".format(termtype[folders.index(folder)])
+        shutil.copy(src, dst)
+    term = "R1"
+    filename = network_drive_loc + "{}".format(store_num)
     filename = network_drive_loc+"{}\\{}\\Register.cfg".format(store_num, term)
     file = open(filename, "r")
     line = file.read()
@@ -56,7 +101,7 @@ def add_location_to_drive():
             add_location_to_drive()
         return 0
     '''    If there's a duplicate it'll warn the user.    '''
-    if duplicate_locid_check(replacement_text, log_file):
+    if duplicate_locid_check(replacement_text, log_file, store_num):
         run_again = input("\nAre you sure you want to continue with location ID " + replacement_text + "? ")
         run_again = run_again.upper()
         if not run_again[0] == "Y":
@@ -73,6 +118,10 @@ def add_location_to_drive():
     replace_loc_id(store_num, "R3", "Register", text_to_search, replacement_text)
     replace_loc_id(store_num, "R4", "Register", text_to_search, replacement_text)
     replace_loc_id(store_num, "R5", "Register", text_to_search, replacement_text)
+    replace_loc_id(store_num, "R6", "Register", text_to_search, replacement_text)
+    replace_loc_id(store_num, "R7", "Register", text_to_search, replacement_text)
+    replace_loc_id(store_num, "R8", "Register", text_to_search, replacement_text)
+    replace_loc_id(store_num, "R9", "Register", text_to_search, replacement_text)
     replace_loc_id(store_num, "Grill", "Kitchen", text_to_search, replacement_text)
     replace_loc_id(store_num, "Make", "Kitchen", text_to_search, replacement_text)
     replace_loc_id(store_num, "Expo", "Kitchen", text_to_search, replacement_text)
@@ -104,11 +153,11 @@ def replace_loc_id(store_num, term, type, text_to_search, replacement_text):
 Checks if Location ID has already been used in the log file.
 If there is a duplicate in the log file it'll warn the user first.
 '''
-def duplicate_locid_check(locid, log_file):
+def duplicate_locid_check(locid, log_file, store_num):
     if os.path.exists(log_file):
         duplicates = []
         regex = r"(" + re.escape(locid) + r")"
-
+        regexstore = r"([0-9][0-9]\-[0-9]*)"
         with open(log_file) as file:
 
             for line in file:
@@ -116,7 +165,9 @@ def duplicate_locid_check(locid, log_file):
                 if not regexsearch:
                     pass
                 else:
-                    duplicates.append(line)
+                    regexsearchstore = re.search(regexstore, line)
+                    if not regexsearchstore[1] == store_num:
+                        duplicates.append(line)
         if len(duplicates) > 0:
             print("Warning! That location ID has already been used! See below. \n")
             for i in duplicates:
