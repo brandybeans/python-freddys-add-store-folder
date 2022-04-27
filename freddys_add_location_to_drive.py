@@ -44,7 +44,10 @@ def add_location_to_drive():
         'Grill 2',
         'DT Expo',
         'DT Expo 2',
-        'DT Make'
+        'DT Make',
+        'Fryer',
+        'Patio Expo',
+        'Custard 2'
     ]
     termtype = [
         'Register',
@@ -66,6 +69,9 @@ def add_location_to_drive():
         'Kitchen',
         'Kitchen',
         'Kitchen',
+        'Kitchen',
+        'Kitchen',
+        'Kitchen'
     ]
     store_num = input("What is the store number? ")
     if not store_num_check(store_num):
@@ -134,6 +140,9 @@ def add_location_to_drive():
     replace_loc_id(store_num, "DT Expo", "Kitchen", text_to_search, replacement_text)
     replace_loc_id(store_num, "DT Grill 2", "Kitchen", text_to_search, replacement_text)
     replace_loc_id(store_num, "DT Expo 2", "Kitchen", text_to_search, replacement_text)
+    replace_loc_id(store_num, "Fryer", "Kitchen", text_to_search, replacement_text)
+    replace_loc_id(store_num, "Patio Expo", "Kitchen", text_to_search, replacement_text)
+    replace_loc_id(store_num, "Custard 2", "Kitchen", text_to_search, replacement_text)
 
     print("Added store {} with LocationID {}.".format(store_num, replacement_text))
     print("Please confirm LocationID before exiting")
